@@ -107,7 +107,17 @@ class Converter
 
         $this->log('Process:0%');
         while ($data = fread($this->iFh, 4096)) {
-            xml_parse($xml, $data, feof($this->iFh)) or die("Can't parse XML data");
+            if (!xml_parse($xml, $data, feof($this->iFh)) ) {
+                throw new \RuntimeException(
+                    sprintf('XML parser error %s: %s at line %s at column %s (byte index %s)',
+                        xml_get_error_code($xml),
+                        xml_error_string(xml_get_error_code($xml)),
+                        xml_get_current_line_number($xml),
+                        xml_get_current_column_number($xml),
+                        xml_get_current_byte_index($xml)
+                    )
+                );
+            }
             $processed += 4096;
             $percentage = round($processed / $totalFileSize * 100, 2);
             $this->log("Processed: {$percentage}%");
