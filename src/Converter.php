@@ -54,7 +54,25 @@ class Converter
         } else {
             throw new \InvalidArgumentException("Export database structure not set");
         }
+
+        if (isset($params['logger'])) {
+            $this->logger = $params['logger'];
+            if (!is_callable($this->logger)) {
+                throw new \InvalidArgumentException('Parameter `logger` must be callable');
+            }
+        } else {
+            $this->logger = function ($message) {
+                echo $message."\n";
+            };
+        }
+
         $this->checkFiles();
+    }
+
+    protected function log($message)
+    {
+        $logger = $this->logger;
+        $logger($message);
     }
 
     private function checkFiles()
@@ -87,16 +105,16 @@ class Converter
         $totalFileSize = filesize($this->iFileName);
         $processed     = 0;
 
-        echo "\nProcess:0%\r";
+        $this->log('Process:0%');
         while ($data = fread($this->iFh, 4096)) {
             xml_parse($xml, $data, feof($this->iFh)) or die("Can't parse XML data");
             $processed += 4096;
             $percentage = round($processed / $totalFileSize * 100, 2);
-            echo "Processed: {$percentage}%\r";
+            $this->log("Processed: {$percentage}%");
+
         }
         xml_parser_free($xml);
-        echo "\r";
-        echo "Processed: 100%\n";
+        $this->log('Processed: 100%');
     }
 
     private function start($parser, $name, $attrs)
