@@ -1,0 +1,21 @@
+{
+    "name": "kluevandrew/mysql2postgresql",
+    "description": "Mysql XML to Postgresql Sql dump converter",
+    "type": "project",
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "Andrew Kluev",
+            "email": "a.kluev@php73.ru"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "ext-pgsql": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Mysql2Postgresql\\": "src"
+        }
+    }
+}
