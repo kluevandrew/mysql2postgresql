@@ -124,7 +124,7 @@ class Converter
 
         }
         xml_parser_free($xml);
-        $this->log('Processed: 100%');
+        $this->log('Processed: 100%                                 ');
     }
 
     private function start($parser, $name, $attrs)
