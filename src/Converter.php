@@ -105,7 +105,7 @@ class Converter
         $totalFileSize = filesize($this->iFileName);
         $processed     = 0;
 
-        $this->log('Process:0%');
+        $this->log("Processed: 0%\r");
         while ($data = fread($this->iFh, 4096)) {
             if (!xml_parse($xml, $data, feof($this->iFh)) ) {
                 throw new \RuntimeException(
@@ -120,7 +120,7 @@ class Converter
             }
             $processed += 4096;
             $percentage = round($processed / $totalFileSize * 100, 2);
-            $this->log("Processed: {$percentage}%");
+            $this->log("Processed: {$percentage}%\r");
 
         }
         xml_parser_free($xml);
